@@ -1,2 +1,2 @@
-# EFCore7ColumnJSON
-Entity Framework Core 7 columnas JSON
+# Entity Framework Core 7 columnas JSON
+EF7 permite actualizar y almacenar cambios en documentos JSON.
