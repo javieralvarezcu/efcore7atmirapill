@@ -10,7 +10,7 @@ public class User : Entity
 
     public string Email { get; set; }
 
-    public Address Address { get; set; } = new();
+    public Address Address { get; set; } 
 
-    public virtual ICollection<Post>? Posts { get; set; }
+public virtual ICollection<Post>? Posts { get; set; }
 }

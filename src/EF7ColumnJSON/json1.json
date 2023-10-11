@@ -1,0 +1,107 @@
+[
+  {
+    "Title": "Why do we use Lorem Ipsum?",
+    "Body": "Lorem Ipsum is a placeholder text used in the graphic and publishing industry to fill in the gaps where actual content is not yet available. It allows designers to focus on the layout and design of a document without being distracted by the actual text, which can be added later. The use of Lorem Ipsum also ensures that the final product looks professional and polished.",
+    "UserId": 1,
+    "User": {
+      "Name": "John",
+      "Username": "john",
+      "Email": "john@email.com",
+      "Address": {
+        "Street": "Street 2",
+        "City": "Madrid",
+        "State": "Madrid",
+        "Country": "Spain",
+        "ZipCode": "222"
+      },
+      "Posts": [],
+      "Id": 1
+    },
+    "Comments": [],
+    "Id": 1
+  },
+  {
+    "Title": "What are the origins of Lorem Ipsum?",
+    "Body": "The origins of Lorem Ipsum can be traced back to a Latin text written by Cicero in 45 BC. The text, called De Finibus Bonorum et Malorum, was a treatise on ethics and morality. Lorem Ipsum is derived from the first line of Lorem Ipsum, which reads 'Lorem ipsum dolor sit amet...'. It has been used as a placeholder text since the 1500s, and has become a standard in the publishing and graphic design industries.",
+    "UserId": 2,
+    "User": {
+      "Name": "Maria",
+      "Username": "maria",
+      "Email": "maria@email.com",
+      "Address": {
+        "Street": "Street 3",
+        "City": "Barcelona",
+        "State": "Barcelona",
+        "Country": "Spain",
+        "ZipCode": "333"
+      },
+      "Posts": [],
+      "Id": 2
+    },
+    "Comments": [],
+    "Id": 2
+  },
+  {
+    "Title": "How is Lorem Ipsum used in web design?",
+    "Body": "In web design, Lorem Ipsum is used to fill in the gaps where actual content is not yet available. It allows designers to focus on the layout and design of a website without being distracted by the actual text, which can be added later. Lorem Ipsum is also useful in testing the functionality of a website, as it can be used to simulate different types of content and ensure that the website is able to handle it.",
+    "UserId": 3,
+    "User": {
+      "Name": "Peter",
+      "Username": "peter",
+      "Email": "peter@email.com",
+      "Address": {
+        "Street": "Street 4",
+        "City": "Valencia",
+        "State": "Valencia",
+        "Country": "Spain",
+        "ZipCode": "444"
+      },
+      "Posts": [],
+      "Id": 3
+    },
+    "Comments": [],
+    "Id": 3
+  },
+  {
+    "Title": "Is Lorem Ipsum copyrighted?",
+    "Body": "No, Lorem Ipsum is not copyrighted. It is considered to be in the public domain, meaning that it can be used freely without permission. However, some versions of Lorem Ipsum may be trademarked, so it is important to check the source before using it for commercial purposes.",
+    "UserId": 4,
+    "User": {
+      "Name": "Julia",
+      "Username": "julia",
+      "Email": "julia@email.com",
+      "Address": {
+        "Street": "Street 5",
+        "City": "Bilbao",
+        "State": "Vizcaya",
+        "Country": "Spain",
+        "ZipCode": "555"
+      },
+      "Posts": [],
+      "Id": 4
+    },
+    "Comments": [],
+    "Id": 4
+  },
+  {
+    "Title": "What are the alternatives to Lorem Ipsum?",
+    "Body": "There are several alternatives to Lorem Ipsum, including Gibberish, Blind Text, and Fillerama. Each of these options provides a similar placeholder text that can be used in the design and publishing industries. However, Lorem Ipsum remains the most popular and widely used option.",
+    "UserId": 5,
+    "User": {
+      "Name": "Carlos",
+      "Username": "carlos",
+      "Email": "carlos@email.com",
+      "Address": {
+        "Street": "Street 6",
+        "City": "Malaga",
+        "State": "Malaga",
+        "Country": "Spain",
+        "ZipCode": "666"
+      },
+      "Posts": [],
+      "Id": 5
+    },
+    "Comments": [],
+    "Id": 5
+  }
+]

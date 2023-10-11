@@ -2,11 +2,11 @@
 
 public class Address
 {
-    public String Street { get; private set; }
-    public String City { get; private set; }
-    public String State { get; private set; }
-    public String Country { get; private set; }
-    public String ZipCode { get; private set; }
+    public string Street { get; set; }
+    public string City { get; set; }
+    public string State { get; set; }
+    public string Country { get; set; }
+    public string ZipCode { get; set; }
 
     public Address() { }
 

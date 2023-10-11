@@ -27,7 +27,7 @@ namespace EF7JSONColumns.Controllers
         }
 
         [HttpGet("{id}", Name = "GetById")]
-        public async Task<User?> Get(int id)
+        public async Task<User?> Get(Guid id)
         {
             return await _dbContext.Users
                 .Include(a => a.Posts)
