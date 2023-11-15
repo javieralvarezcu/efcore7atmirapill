@@ -2,6 +2,7 @@
 using Azure.AI.OpenAI;
 using EF7ColumnJSON.Entities;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ConsoleApp1.DataAccess
 {
@@ -64,7 +65,7 @@ namespace ConsoleApp1.DataAccess
 
         public static async Task InitializeAsync(ApplicationDbContext context)
         {
-            //await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureDeletedAsync();
 
             await context.Database.MigrateAsync();
 
@@ -74,46 +75,96 @@ namespace ConsoleApp1.DataAccess
             var posts = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Post>>(json);
 
 
-            //EJEMPLO DE QUE TOJSON() ES COMPLETAMENTE USABLE
+            //EJEMPLO DE QUE TOJSON() ES COMPLETAMENTE USABLE CON LINQ
             posts[0].User.Address = new Address("Street 1", "Sevilla", "Sevilla", "Spain", "111");
             posts[1].User.Address = new Address("Street 2", "Madrid", "Madrid", "Spain", "222");
             posts[2].User.Address = new Address("Street 3", "Barcelona", "Barcelona", "Spain", "333");
 
+            //AÑADIMOS LOS POSTS A LA BDD MEDIANTE EF
+            context.AddRange(posts);
+            context.SaveChanges();
+
+            var POST1 = context.Posts.FirstOrDefault();
+
             //LLAMADA A LA API DE OPENAI PARA OBTENER NUEVOS REGISTROS DUMMY
-            var jsonPrompt = Newtonsoft.Json.JsonConvert.SerializeObject(posts[0]);
+            var jsonPrompt = Newtonsoft.Json.JsonConvert.SerializeObject(context.Posts.FirstOrDefault(), Formatting.Indented,
+new JsonSerializerSettings
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+});
             int regsNum = 5;
-
-            OpenAIClient client = new OpenAIClient(
-                                  new Uri("https://pruebaopenaiatmirajavi.openai.azure.com/"),
-                                  new AzureKeyCredential("f536dfe16ca74b689336762fd7a5fed4"));
-
-            Response<ChatCompletions> responseWithoutStream = await client.GetChatCompletionsAsync("gtp35prueba",
-                new ChatCompletionsOptions()
-                {
-                    Messages =
-                    {
-                        new ChatMessage(ChatRole.System,
-                                        $"based on this json: [{jsonPrompt}] create {regsNum} more dummy data"),
-                    },
-                    Temperature = (float)0.7,
-                    MaxTokens = 2000,
-                    NucleusSamplingFactor = (float)0.95,
-                    FrequencyPenalty = 0,
-                    PresencePenalty = 0,
-                });
-
-            ChatCompletions completions = responseWithoutStream.Value;
 
             //jsonPath = @"json1.json";
             //json = File.ReadAllText(jsonPath);
 
-            var aiPosts = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Post>>(completions.Choices[0].Message.Content);
+            var gptPosts = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Post>>(await GptRequest($"based on this json: [{jsonPrompt}] create {regsNum} more dummy data"));
             //var posts1 = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Post>>(json);
 
-            posts.AddRange(aiPosts);
-            await context.AddRangeAsync(posts);
-            await context.SaveChangesAsync();
+            //AÑADIMOS LOS NUEVOS REGISTROS
+            if (gptPosts != null) { context.AddRange(gptPosts); }
+            context.SaveChanges();
 
+            //BUSCAMOS Y ELIMINAMOS REGISTROS SEGUN SU DIRECCIÓN
+            IEnumerable<Post> filteredPosts = context.Posts.Where(i => i.User.Address.City.Equals("Sevilla")).ToList();
+            IEnumerable<User> filteredUsers = filteredPosts.Select(i => i.User).ToList();
+
+            context.Users.RemoveRange(filteredUsers);
+            context.RemoveRange(filteredPosts);
+
+            context.SaveChanges();
+
+            //COMPROBAMOS QUE ESOS REGISTROS YA NO EXISTEN
+            var remainingPosts = context.Posts;
+            var remainigUsers = remainingPosts.Select(i => i.User).ToList();
+
+            foreach (var item in remainingPosts)
+            {
+                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(item, Formatting.Indented,
+new JsonSerializerSettings
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+}));
+            }
+
+            foreach (var item in remainigUsers)
+            {
+                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(item, Formatting.Indented,
+new JsonSerializerSettings
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+}));
+            }
+
+
+
+
+
+            async Task<string> GptRequest(string prompt)
+            {
+                OpenAIClient client = new OpenAIClient(
+                                      new Uri("https://pruebaopenaiatmirajavi.openai.azure.com/"),
+                                      new AzureKeyCredential("f536dfe16ca74b689336762fd7a5fed4"));
+
+                Response<ChatCompletions> responseWithoutStream = await client.GetChatCompletionsAsync("gtp35prueba",
+                    new ChatCompletionsOptions()
+                    {
+                        Messages =
+                        {
+                        new ChatMessage(ChatRole.System,
+                                        prompt),
+                        },
+                        Temperature = (float)0.7,
+                        MaxTokens = 2000,
+                        NucleusSamplingFactor = (float)0.95,
+                        FrequencyPenalty = 0,
+                        PresencePenalty = 0,
+                    });
+
+                ChatCompletions completions = responseWithoutStream.Value;
+
+                return completions.Choices[0].Message.Content;
+            }
         }
+
     }
 }
